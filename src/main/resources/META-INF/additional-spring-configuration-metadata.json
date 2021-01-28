@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "my.spring.env",
+      "type": "java.lang.String",
+      "description": "Description for my.spring.env."
+    }
+  ]
+}

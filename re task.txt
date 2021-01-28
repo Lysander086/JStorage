@@ -1,5 +1,5 @@
 requirements
-    1. store key value pair to service, key values in string
+  1. store key value pair to service, key values in string
 	2. can get the value using key
 	3. every value be deleted after 10s
 
@@ -14,15 +14,16 @@ bonus:
 	client can specify expiration period
 	
 	
-要求
-	1. 字符串的键值对存储到服务(service)
-	2. 可以通过key获取value
-	3. 键值对将在10秒后无效并删除
+综述
+	自实现一个缓存微服务, 此为服务有如下3个功能
+		1. 字符串的键值对存储到服务(service)
+		2. 可以通过key获取value
+		3. 键值对将在10秒后无效并删除
 任务: 
 	• 用spring boot微服务实现该缓存, 并且提供http api
 	• 要考虑并发问题
 	• 时间复杂度应小于O(n), 空间复杂度应在O(n)以内,
-	• 需要考虑大数量存储, 比如10万到1亿存储
-	• 最好用java的sdk来做, 不要用三方缓存服务或者开源实现
+	• 需要考虑大数量存储, 比如1百万到1亿存储
+	• 最好用java的sdk来子实现, 不要用三方缓存服务或者开源实现
 bonus
 	客户端可以指定特定键值对的过期时间, 默认为10秒
