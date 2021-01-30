@@ -12,7 +12,12 @@ task:
 
 bonus: 
 	client can specify expiration period
-	
+
+思路:
+  1. 存储 key, value
+  2. 缓存过期
+  3. 再考虑时间复杂度, 空间复杂度
+  4. 最后考虑并发
 	
 综述
 	自实现一个缓存微服务, 此为服务有如下3个功能
