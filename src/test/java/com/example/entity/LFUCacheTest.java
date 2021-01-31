@@ -34,11 +34,11 @@ public class LFUCacheTest {
 
     private void anotherSet(LFUCacheMap map){
 
-        map.put(5, 5); //连续命中两次5
-        map.put(5, 5);
-        map.put(2, 2); //连续命中三次2
-        map.put(2, 2);
-        map.put(2, 2);
+//        map.put(5, 5); //连续命中两次5
+//        map.put(5, 5);
+//        map.put(2, 2); //连续命中三次2
+//        map.put(2, 2);
+//        map.put(2, 2);
         System.out.println("修改命中次数后：" + map.showList());//打印又存储一个数据之后的情况
     }
 

@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.a_experiments;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * https://blog.csdn.net/wsh_0703/article/details/80339718
  * 用来存储短暂对象的缓存类，实现Map接口，内部有一个定时器用来清除过期（30秒）的对象。
  * 为避免创建过多线程，没有特殊要求请使用getDefault()方法来获取本类的实例。
  *

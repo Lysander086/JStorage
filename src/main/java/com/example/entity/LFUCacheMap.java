@@ -28,21 +28,38 @@ public class LFUCacheMap {
 //        this.setCacheSize(size);
 //    }
 
-    public LFUCacheMap(){}
+    public LFUCacheMap() {
+    }
 
     //获取缓存中的数据
     public Object get(Object key) throws NullPointerException {
-            if (key == null)
-                return null;
-            //命中+1
-            map.get(key).countIncrement();
-            return map.get(key).val;
+        if (key == null)
+            return null;
+        //命中+1
+        map.get(key).countIncrement();
+        return map.get(key).val;
 
 
     }
 
-    //存储数据
+
+    /**
+     * with DEFAULT_TIMEOUT
+     * @param key
+     * @param val
+     */
+    public void put(Object key, Object val) {
+        this.put(key, val, Config.DEFAULT_TIMEOUT);
+    }
+
+    /**
+     * 存储数据
+     * @param key
+     * @param val
+     * @param timeOut
+     */
     public void put(Object key, Object val, long timeOut) {
+
         //如果本来就存在
         if (map.get(key) != null) {
             this.cacheSize++;
@@ -74,7 +91,8 @@ public class LFUCacheMap {
     //获取存储情况
     public String showList() {
         List<Value> list = new ArrayList<>(map.values());
-        Collections.sort(list);
+//        感觉这个sort只会使得一次存储的复杂度变成O(logn)
+//        Collections.sort(list);
         StringBuilder stb = new StringBuilder();
         for (Value value : list) {
             stb.append(value.key).append(": ").append(value.val).append("\n");
@@ -106,7 +124,7 @@ public class LFUCacheMap {
             this.timer.interrupt();
             this.timeOut = timeOut;
             if (this.timer.isInterrupted()) {
-                System.out.println("interrupt success");
+//                System.out.println("interrupt success");
                 this.createTimeoutTask();
             }
         }

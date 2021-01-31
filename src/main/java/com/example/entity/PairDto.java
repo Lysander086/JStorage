@@ -10,4 +10,5 @@ public class PairDto {
     private long timeOut = Config.DEFAULT_TIMEOUT;
 
 
+
 }

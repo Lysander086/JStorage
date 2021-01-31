@@ -11,7 +11,7 @@ public class Util {
                 Thread.sleep(delay);// 如使用了sleep,同步锁的wait,socket中的receiver,accept等方法时, 将处于阻塞状态，
                 runnable.run();
             } catch (InterruptedException ie) {
-                System.out.println("interrupted " + runnable.toString());
+//                System.out.println("interrupted " + runnable.toString());
             } catch (Exception e) {
                 System.err.println(e);
             }

@@ -24,7 +24,8 @@ public class HelloController {
     use postman
     {
         "key": "f",
-        "val": "fly"
+        "val": "fly",
+        timeOut: 10000
     }
      */
     @PostMapping("/set")
@@ -33,13 +34,20 @@ public class HelloController {
         return cacheStore.showList();
     }
 
+    /*
+     use postman
+    {
+        "key": "f",
+    }
+     */
     @PostMapping("/get")
     public String get(@RequestBody PairDto pair) {
-        String res = "null";
+        String res;
         try {
-            res = (String) cacheStore.get(pair.getKey());
+            res = String.valueOf(cacheStore.get(pair.getKey()));
         } catch (Exception e) {
-            log.info(String.valueOf(e));
+            res = "null";
+            log.info(String.valueOf(e) + " " + res);
         }
         return res;
 
