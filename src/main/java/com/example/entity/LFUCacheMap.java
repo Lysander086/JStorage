@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,26 +31,22 @@ public class LFUCacheMap {
     public LFUCacheMap(){}
 
     //获取缓存中的数据
-    public Object get(Object key) {
-        try {
+    public Object get(Object key) throws NullPointerException {
             if (key == null)
                 return null;
             //命中+1
             map.get(key).countIncrement();
             return map.get(key).val;
-        } catch (Exception e) {
-            System.out.println("不存在" + key.toString());
-        }
-        return null;
+
 
     }
 
     //存储数据
-    public void put(Object key, Object val) {
+    public void put(Object key, Object val, long timeOut) {
         //如果本来就存在
         if (map.get(key) != null) {
             this.cacheSize++;
-            map.get(key).abortTimoutTask();
+            map.get(key).renewTimeOutTask(timeOut);
             map.get(key).countIncrement();
             map.get(key).setVal(val);
         } else {
@@ -63,12 +56,10 @@ public class LFUCacheMap {
             if (map.size() >= cacheSize) {
                 remove();//移除最后一个数据
             }*/
-            Value value = new Value(val, key);
+            Value value = new Value(val, key, timeOut);
             value.createTimeoutTask();
             map.put(key, value);
         }
-
-
         //
     }
 
@@ -111,10 +102,12 @@ public class LFUCacheMap {
         }
 
 
-        public void abortTimoutTask() {
+        public void renewTimeOutTask(long timeOut) {
             this.timer.interrupt();
+            this.timeOut = timeOut;
             if (this.timer.isInterrupted()) {
                 System.out.println("interrupt success");
+                this.createTimeoutTask();
             }
         }
 
@@ -144,9 +137,5 @@ public class LFUCacheMap {
             }
             return 0;
         }
-
-
     }
-
-
 }

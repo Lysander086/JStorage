@@ -6,5 +6,5 @@ public class Config {
     * */
 
     //   todo 最终设成10秒
-    public static final long DEFAULT_TIMEOUT = 2 * 100;
+    public static final long DEFAULT_TIMEOUT = 5 * 1000;
 }

@@ -10,10 +10,9 @@ import javax.annotation.Resource;
 
 @RestController
 public class HelloController {
+    private static final Logger log = LoggerFactory.getLogger(HelloController.class);
     @Resource
     LFUCacheMap cacheStore;
-
-    private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
     @RequestMapping("/say")
     public String say() {
@@ -21,15 +20,29 @@ public class HelloController {
         return "Hello World\n line feed?";
     }
 
+    /*
+    use postman
+    {
+        "key": "f",
+        "val": "fly"
+    }
+     */
     @PostMapping("/set")
     public String set(@RequestBody PairDto pair) {
-        cacheStore.put(pair.getKey(), pair.getVal());
+        cacheStore.put(pair.getKey(), pair.getVal(), pair.getTimeOut());
         return cacheStore.showList();
     }
 
     @PostMapping("/get")
     public String get(@RequestBody PairDto pair) {
-        return (String) cacheStore.get(pair.getKey());
+        String res = "null";
+        try {
+            res = (String) cacheStore.get(pair.getKey());
+        } catch (Exception e) {
+            log.info(String.valueOf(e));
+        }
+        return res;
+
     }
 
 
