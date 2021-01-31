@@ -1,6 +1,6 @@
 package com.example.controlller;
 
-import com.example.entity.LFUCache;
+import com.example.entity.LFUCacheMap;
 import com.example.entity.PairDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,7 @@ import javax.annotation.Resource;
 @RestController
 public class HelloController {
     @Resource
-    LFUCache cacheStore;
-
+    LFUCacheMap cacheStore;
 
     private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 

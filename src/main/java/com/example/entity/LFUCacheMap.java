@@ -1,12 +1,16 @@
 package com.example.entity;
 
+import com.example.Config;
+import com.example.util.Util;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 最不常使用 (Least Frequently Used)
@@ -14,33 +18,53 @@ import java.util.Map;
  */
 // LFU算法其实还要考虑命中时间, 本实现先考虑命中次数
 @Service
-public class LFUCache {
+public class LFUCacheMap {
 
-    private Map<Object, Value> map = new HashMap<>();
+    @Setter
+    @Getter
+    private int cacheSize;
+    @Getter
+    private Map<Object, Value> map = new ConcurrentHashMap<>();
 
+
+//    public LFUCacheMap(int size) {
+//        this.setCacheSize(size);
+//    }
+
+    public LFUCacheMap(){}
 
     //获取缓存中的数据
     public Object get(Object key) {
-        if (key == null)
-            return null;
+        try {
+            if (key == null)
+                return null;
+            //命中+1
+            map.get(key).countIncrement();
+            return map.get(key).val;
+        } catch (Exception e) {
+            System.out.println("不存在" + key.toString());
+        }
+        return null;
 
-        //命中+1
-        map.get(key).countInc();
-        return map.get(key).val;
     }
 
     //存储数据
     public void put(Object key, Object val) {
         //如果本来就存在
         if (map.get(key) != null) {
-            map.get(key).countInc();//命中计数
-            map.get(key).setVal(val);//覆盖结果值
+            this.cacheSize++;
+            map.get(key).abortTimoutTask();
+            map.get(key).countIncrement();
+            map.get(key).setVal(val);
         } else {
-            //如果存储已超过限定值
-//            if (map.size() >= SIZE) {
-//                remove();//移除最后一个数据
-//            }
+
+            /*
+             //如果存储已超过限定值
+            if (map.size() >= cacheSize) {
+                remove();//移除最后一个数据
+            }*/
             Value value = new Value(val, key);
+            value.createTimeoutTask();
             map.put(key, value);
         }
 
@@ -71,6 +95,9 @@ public class LFUCache {
         Object key;
         Object val;
         int hitCount;
+        Thread timer;
+        long timeOut = Config.DEFAULT_TIMEOUT;
+
 
         public Value(Object v, Object key) {
             this.key = key;
@@ -78,11 +105,31 @@ public class LFUCache {
             this.hitCount = 1;  //第一次进入设置命中为1
         }
 
-        public void setVal(Object obj) {
-            this.val = obj;
+        public Value(Object v, Object key, long timeout) {
+            this(v, key);
+            this.timeOut = timeout;
         }
 
-        public void countInc() {
+
+        public void abortTimoutTask() {
+            this.timer.interrupt();
+            if (this.timer.isInterrupted()) {
+                System.out.println("interrupt success");
+            }
+        }
+
+        public void createTimeoutTask() {
+            this.timer = Util.setTimeout(() -> {
+                this.val = null;
+            }, this.timeOut);
+        }
+
+        public void setVal(Object obj) {
+            this.val = obj;
+            this.createTimeoutTask();
+        }
+
+        public void countIncrement() {
             hitCount++;
         }
 
