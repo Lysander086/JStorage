@@ -1,25 +1,26 @@
-package com.example.entity;
+package com.example;
 
-import com.example.Config;
 import com.example.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 最不常使用 (Least Frequently Used)
  * - 最不常使用的排在最后面 ( 根据引用次数排序 )
  */
-// LFU算法其实还要考虑命中时间, 本实现先考虑命中次数
 @Service
-public class LFUCacheMap {
+public class LFUCache {
 
     @Setter
     @Getter
-    private int cacheSize;
+    private int cacheSize = 0;
     @Getter
     private Map<Object, Value> map = new ConcurrentHashMap<>();
 
@@ -28,7 +29,7 @@ public class LFUCacheMap {
 //        this.setCacheSize(size);
 //    }
 
-    public LFUCacheMap() {
+    public LFUCache() {
     }
 
     //获取缓存中的数据
@@ -38,13 +39,12 @@ public class LFUCacheMap {
         //命中+1
         map.get(key).countIncrement();
         return map.get(key).val;
-
-
     }
 
 
     /**
      * with DEFAULT_TIMEOUT
+     *
      * @param key
      * @param val
      */
@@ -54,6 +54,7 @@ public class LFUCacheMap {
 
     /**
      * 存储数据
+     *
      * @param key
      * @param val
      * @param timeOut
@@ -68,11 +69,7 @@ public class LFUCacheMap {
             map.get(key).setVal(val);
         } else {
 
-            /*
-             //如果存储已超过限定值
-            if (map.size() >= cacheSize) {
-                remove();//移除最后一个数据
-            }*/
+
             Value value = new Value(val, key, timeOut);
             value.createTimeoutTask();
             map.put(key, value);
@@ -91,8 +88,9 @@ public class LFUCacheMap {
     //获取存储情况
     public String showList() {
         List<Value> list = new ArrayList<>(map.values());
-//        感觉这个sort只会使得一次存储的复杂度变成O(logn)
-//        Collections.sort(list);
+
+        Collections.sort(list);
+
         StringBuilder stb = new StringBuilder();
         for (Value value : list) {
             stb.append(value.key).append(": ").append(value.val).append("\n");
@@ -104,8 +102,9 @@ public class LFUCacheMap {
         Object key;
         Object val;
         int hitCount;
+//        used to interrupt
         Thread timer;
-        long timeOut = Config.DEFAULT_TIMEOUT;
+        long timeOut;
 
 
         public Value(Object v, Object key) {
@@ -124,7 +123,6 @@ public class LFUCacheMap {
             this.timer.interrupt();
             this.timeOut = timeOut;
             if (this.timer.isInterrupted()) {
-//                System.out.println("interrupt success");
                 this.createTimeoutTask();
             }
         }

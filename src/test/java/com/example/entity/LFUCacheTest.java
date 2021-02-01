@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import com.example.Config;
+import com.example.LFUCache;
 import com.example.util.Util;
 
 public class LFUCacheTest {
@@ -8,7 +9,7 @@ public class LFUCacheTest {
 
     public static void main(String[] args) {
 
-        LFUCacheMap map = new LFUCacheMap();
+        LFUCache map = new LFUCache();
 
         for (int i = 0; i++ < 5; ) {
             map.put(i, i);
@@ -32,7 +33,7 @@ public class LFUCacheTest {
 
     }
 
-    private void anotherSet(LFUCacheMap map){
+    private void anotherSet(LFUCache map){
 
 //        map.put(5, 5); //连续命中两次5
 //        map.put(5, 5);
