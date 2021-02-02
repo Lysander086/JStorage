@@ -1,3 +1,9 @@
+features implemented: 
+- [x] store simple pairs with key and value
+- [x] delete pair after specific time
+- [x] customized pair timeout
+- [x] exposed web api in web controller
+
 
 思路:
   
