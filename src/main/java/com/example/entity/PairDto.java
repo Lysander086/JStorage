@@ -13,6 +13,4 @@ public class PairDto {
     private String val;
     private long timeOut = Config.DEFAULT_TIMEOUT;
 
-
-
 }

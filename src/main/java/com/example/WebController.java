@@ -24,7 +24,8 @@ public class WebController {
     @PostMapping("/set")
     public String set(@RequestBody PairDto pair) {
         cacheStore.put(pair.getKey(), pair.getVal(), pair.getTimeOut());
-        return cacheStore.showList();
+        return "success";
+//        return cacheStore.showList();
     }
 
     /*
@@ -47,9 +48,5 @@ public class WebController {
     }
 
 
-    @GetMapping("/all")
-    public String all() {
-        log.info("all");
-        return cacheStore.showList();
-    }
+
 }

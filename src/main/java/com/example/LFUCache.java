@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -79,18 +77,18 @@ public class LFUCache {
         cacheMap.remove(v.key);
     }
 
-    //获取存储情况
-    public String showList() {
-        List<Value> list = new ArrayList<>(cacheMap.values());
-
-        Collections.sort(list);
-
-        StringBuilder stb = new StringBuilder();
-        for (Value value : list) {
-            stb.append(value.key).append(": ").append(value.val).append("\n");
-        }
-        return stb.toString();
-    }
+//    //获取存储情况
+//    public String showList() {
+//        List<Value> list = new ArrayList<>(cacheMap.values());
+//
+//        Collections.sort(list);
+//
+//        StringBuilder stb = new StringBuilder();
+//        for (Value value : list) {
+//            stb.append(value.key).append(": ").append(value.val).append("\n");
+//        }
+//        return stb.toString();
+//    }
 
     static class Value implements Comparable<Value> {    //定义一个静态内部类，主要是用于统计命中数
         Object key;

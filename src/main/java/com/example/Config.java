@@ -5,6 +5,5 @@ public class Config {
     * 过长数字使用L
     * */
 
-    //   todo 最终设成10秒
-    public static final long DEFAULT_TIMEOUT = 5 * 1000;
+    public static final long DEFAULT_TIMEOUT = 10 * 1000;
 }
