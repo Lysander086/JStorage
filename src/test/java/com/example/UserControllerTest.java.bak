@@ -1,0 +1,35 @@
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment =SpringBootTest.WebEnvironment.MOCK,classes = TestApplication.class)
+@AutoConfigureMockMvc
+public class UserControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
+
+    @Test
+    @DisplayName("测试controller方法")
+    void test() throws Exception {
+        User param = new User();
+        param.setUserId(1111);
+
+        List<Address> addressList = new ArrayList<>();
+        Address address = new Address();
+        address.setName("我的地址");
+        addressList.add(address);
+
+        param.setAddressList(addressList);
+        
+        MvcResult mvcResult = mockMvc.perform(
+                post("/xxx/test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(param)))
+                .andReturn();
+        
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+}
+

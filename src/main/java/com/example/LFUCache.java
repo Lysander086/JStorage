@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.util.Util;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
@@ -16,29 +17,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * - 最不常使用的排在最后面 ( 根据引用次数排序 )
  */
 @Service
+@NoArgsConstructor
 public class LFUCache {
 
+    @Getter
+    private static Map<Object, Value> cacheMap = new ConcurrentHashMap<>();
     @Setter
     @Getter
     private int cacheSize = 0;
-    @Getter
-    private Map<Object, Value> map = new ConcurrentHashMap<>();
 
-
-//    public LFUCacheMap(int size) {
-//        this.setCacheSize(size);
-//    }
-
-    public LFUCache() {
-    }
 
     //获取缓存中的数据
     public Object get(Object key) throws NullPointerException {
         if (key == null)
             return null;
         //命中+1
-        map.get(key).countIncrement();
-        return map.get(key).val;
+        cacheMap.get(key).countIncrement();
+        return cacheMap.get(key).val;
     }
 
 
@@ -62,17 +57,16 @@ public class LFUCache {
     public void put(Object key, Object val, long timeOut) {
 
         //如果本来就存在
-        if (map.get(key) != null) {
+        if (cacheMap.get(key) != null) {
             this.cacheSize++;
-            map.get(key).renewTimeOutTask(timeOut);
-            map.get(key).countIncrement();
-            map.get(key).setVal(val);
+            cacheMap.get(key).renewTimeOutTask(key, timeOut);
+            cacheMap.get(key).countIncrement();
+            cacheMap.get(key).setVal(val);
         } else {
 
-
             Value value = new Value(val, key, timeOut);
-            value.createTimeoutTask();
-            map.put(key, value);
+            value.createTimeoutTask(key);
+            cacheMap.put(key, value);
         }
         //
     }
@@ -80,14 +74,14 @@ public class LFUCache {
     // unused: 数据移除最后一个数据
     public void remove() {
         //先拿到最后一个数据
-        Value v = Collections.min(map.values());
+        Value v = Collections.min(cacheMap.values());
         //移除最后一个数据
-        map.remove(v.key);
+        cacheMap.remove(v.key);
     }
 
     //获取存储情况
     public String showList() {
-        List<Value> list = new ArrayList<>(map.values());
+        List<Value> list = new ArrayList<>(cacheMap.values());
 
         Collections.sort(list);
 
@@ -102,7 +96,7 @@ public class LFUCache {
         Object key;
         Object val;
         int hitCount;
-//        used to interrupt
+        //        used to interrupt
         Thread timer;
         long timeOut;
 
@@ -119,23 +113,26 @@ public class LFUCache {
         }
 
 
-        public void renewTimeOutTask(long timeOut) {
+        public void renewTimeOutTask(Object key, long timeOut) {
             this.timer.interrupt();
             this.timeOut = timeOut;
             if (this.timer.isInterrupted()) {
-                this.createTimeoutTask();
+                this.createTimeoutTask(key);
             }
         }
 
-        public void createTimeoutTask() {
+        public void createTimeoutTask(Object key) {
+//            this.timer = Util.setTimeout(() -> {
+//                this.val = null;
+//            }, this.timeOut);
             this.timer = Util.setTimeout(() -> {
-                this.val = null;
+                cacheMap.remove(key);
             }, this.timeOut);
         }
 
         public void setVal(Object obj) {
             this.val = obj;
-            this.createTimeoutTask();
+            this.createTimeoutTask(key);
         }
 
         public void countIncrement() {
