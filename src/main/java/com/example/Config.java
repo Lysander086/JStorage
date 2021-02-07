@@ -6,4 +6,8 @@ public class Config {
     * */
 
     public static final long DEFAULT_TIMEOUT = 10 * 1000;
+
+    // 是否完全依赖定时器来对key进行清除
+    public static final boolean allDependsOnClearer = false;
+
 }
