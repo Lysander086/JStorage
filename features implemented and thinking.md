@@ -1,3 +1,7 @@
+design:
+- [ ] storage map: concurrent hashMap 
+
+
 features implemented: 
 - [x] store simple pairs with key and value
 - [x] delete pair after specific time
