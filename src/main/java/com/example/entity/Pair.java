@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PairDto {
+public class Pair {
     private String key;
     private String val;
     private long timeOut = Config.DEFAULT_TIMEOUT;

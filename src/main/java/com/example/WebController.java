@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.entity.PairDto;
+import com.example.entity.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class WebController {
     }
      */
     @PostMapping("/set")
-    public String set(@RequestBody PairDto pair) {
+    public String set(@RequestBody Pair pair) {
         cacheStore.put(pair.getKey(), pair.getVal(), pair.getTimeOut());
         return "success";
 //        return cacheStore.showList();
@@ -35,7 +35,7 @@ public class WebController {
     }
      */
     @PostMapping("/get")
-    public String get(@RequestBody PairDto pair) {
+    public String get(@RequestBody Pair pair) {
         String res;
         try {
             res = (String) cacheStore.get(pair.getKey());
