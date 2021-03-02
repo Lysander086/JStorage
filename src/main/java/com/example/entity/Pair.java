@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 public class Pair {
     private String key;
     private String val;
+
+    // unit: second
     private long timeOut = Config.DEFAULT_TIMEOUT;
 
 }

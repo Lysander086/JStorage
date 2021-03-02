@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.deprecate.LFUCache;
 import com.example.entity.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +19,13 @@ public class WebController {
     {
         "key": "f",
         "val": "fly",
-        "timeOut": 10000
+        "timeOut": 10
     }
      */
     @PostMapping("/set")
     public String set(@RequestBody Pair pair) {
         cacheStore.put(pair.getKey(), pair.getVal(), pair.getTimeOut());
         return "success";
-//        return cacheStore.showList();
     }
 
     /*
@@ -46,7 +46,5 @@ public class WebController {
         }
         return res;
     }
-
-
 
 }

@@ -1,5 +1,6 @@
-package com.example;
+package com.example.deprecate;
 
+import com.example.Config;
 import com.example.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
