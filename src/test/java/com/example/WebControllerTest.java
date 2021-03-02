@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.entity.PairDto;
+import com.example.entity.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ public class WebControllerTest {
     private TestRestTemplate template = new TestRestTemplate();
 
 
-    List<PairDto> testList;
+    List<Pair> testList;
     long testNum = 10;
     Random random = new Random();
 
@@ -26,9 +26,9 @@ public class WebControllerTest {
 
     @Before
     public void setUp() {
-        PairDto tem;
+        Pair tem;
         for (int i = 0; i < testNum; i++) {
-            tem = new PairDto(String.valueOf(i), String.valueOf(i), random.nextInt(9000) + 1000);
+            tem = new Pair(String.valueOf(i), String.valueOf(i), random.nextInt(9000) + 1000);
             testList.add(tem);
         }
     }
