@@ -15,4 +15,8 @@ public class Pair {
     // unit: second
     private long timeOut = Config.DEFAULT_TIMEOUT;
 
+    public Pair(String key, String val) {
+        this.key = key;
+        this.val = val;
+    }
 }
