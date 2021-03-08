@@ -18,8 +18,6 @@ public class PlayJava {
         long leftK = 1614781620860L;
 
         tm.put(leftK, new Pair("e", "eye"));
-
-        setAccessible(TreeMap.class);
         tm.put(kTime, new Pair("f", "fly"));
 
         Method getEntry = TreeMap.class.getDeclaredMethod("getEntry", Object.class);
@@ -28,14 +26,8 @@ public class PlayJava {
 
         Map.Entry res = (Map.Entry) getEntry.invoke(tm, kTime);
 
-//
-//        System.out.println(res.getClass().toString());
-//
-//        System.out.println(res.getKey().toString());
-//
-//        System.out.println(res.getValue().getClass());
-
-//        System.out.println(res.left);
+        System.out.println(res.getKey());
+        System.out.println(((Pair) res.getValue()).getVal());
 
     }
 
